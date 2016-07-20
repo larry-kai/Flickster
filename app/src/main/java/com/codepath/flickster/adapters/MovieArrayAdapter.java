@@ -1,7 +1,7 @@
 package com.codepath.flickster.adapters;
 
 import android.content.Context;
-import android.util.Log;
+import android.content.res.Configuration;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,12 +15,21 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
+
 /**
  * Created by santoshag on 7/19/16.
  */
 public class MovieArrayAdapter extends ArrayAdapter<Movie> {
 
     private static final String TAG = "MovieArrayAdapter";
+
+    // View lookup cache
+    private static class ViewHolder {
+        TextView tvTitle;
+        TextView tvOverview;
+        ImageView ivMovieImage;
+    }
 
     public MovieArrayAdapter(Context context, List<Movie> movies){
         super(context, android.R.layout.simple_list_item_1, movies);
@@ -31,26 +40,38 @@ public class MovieArrayAdapter extends ArrayAdapter<Movie> {
         //get the movie data for the position
         Movie movie = getItem(position);
 
+        //use viewholder pattern to speed up the listview population
+        ViewHolder viewHolder;
         //check if existing view is being reused
         if(convertView == null){
+            viewHolder = new ViewHolder();
             LayoutInflater layoutInflater = LayoutInflater.from(getContext());
-             convertView = layoutInflater.inflate(R.layout.item_movie, parent, false);
+            convertView = layoutInflater.inflate(R.layout.item_movie, parent, false);
+            viewHolder.tvTitle = (TextView) convertView.findViewById(R.id.tvTitle);
+            viewHolder.tvOverview = (TextView) convertView.findViewById(R.id.tvOverview);
+            //find the movie image view
+            viewHolder.ivMovieImage = (ImageView) convertView.findViewById(R.id.ivMovieImage);
+            convertView.setTag(viewHolder);
+        }else {
+            viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        //find the movie image view
-        ImageView ivMovieImage = (ImageView) convertView.findViewById(R.id.ivMovieImage);
+        // Populate the data into the template view using the data object
+        viewHolder.tvTitle.setText(movie.getOriginalTitle());
+        viewHolder.tvOverview.setText(movie.getOverview());
         //clear out image from image view
-        ivMovieImage.setImageResource(0);
+        viewHolder.ivMovieImage.setImageResource(0);
 
-        TextView tvTitle = (TextView) convertView.findViewById(R.id.tvTitle);
-        TextView tvOverview = (TextView) convertView.findViewById(R.id.tvOverview);
+        String imagePath = new String();
+        int orientation = getContext().getResources().getConfiguration().orientation;
+        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+            imagePath = movie.getPosterPath();
 
-        //populate data
-        tvTitle.setText(movie.getOriginalTitle());
-        tvOverview.setText(movie.getOverview());
+        } else if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            imagePath = movie.getBackdropPath();
+        }
 
-        Log.i(TAG, "movie poster path: " + movie.getPosterPath());
-        Picasso.with(getContext()).load(movie.getPosterPath()).into(ivMovieImage);
+        Picasso.with(getContext()).load(imagePath).transform(new RoundedCornersTransformation(15, 15, RoundedCornersTransformation.CornerType.BOTTOM_RIGHT)).into(viewHolder.ivMovieImage);
         return  convertView;
 
     }
