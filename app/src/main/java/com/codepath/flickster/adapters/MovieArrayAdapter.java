@@ -71,7 +71,7 @@ public class MovieArrayAdapter extends ArrayAdapter<Movie> {
             imagePath = movie.getBackdropPath();
         }
 
-        Picasso.with(getContext()).load(imagePath).transform(new RoundedCornersTransformation(15, 15, RoundedCornersTransformation.CornerType.BOTTOM_RIGHT)).into(viewHolder.ivMovieImage);
+        Picasso.with(getContext()).load(imagePath).placeholder(R.mipmap.ic_launcher).transform(new RoundedCornersTransformation(15, 15, RoundedCornersTransformation.CornerType.BOTTOM_RIGHT)).into(viewHolder.ivMovieImage);
         return  convertView;
 
     }
