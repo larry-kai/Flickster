@@ -20,87 +20,123 @@ import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
 /**
  * Created by santoshag on 7/19/16.
  */
-public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> {
+public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final String TAG = "MovieArrayAdapter";
     // Store a member variable for the movies
     private List<Movie> mMovies;
-    // Store the context for easy access
+
     private Context mContext;
 
-    // Easy access to the context object in the recyclerview
+    private final int POPULAR = 0, UNPOPULAR = 1;
+
     public Context getContext() {
         return mContext;
     }
 
-    // Provide a direct reference to each of the views within a data item
-    // Used to cache the views within the item layout for fast access
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    // Pass in the movie list into the constructor
+    public MovieAdapter(Context context, List<Movie> movies){
+        mContext = context;
+        mMovies = movies;
+    }
 
-        // Your holder should contain a member variable
-        // for any view that will be set as you render a row
-        public TextView tvTitle;
-        public TextView tvOverview;
-        public ImageView ivMovieImage;
-
-        // We also create a constructor that accepts the entire item row
-        // and does the view lookups to find each subview
-        public ViewHolder(View itemView) {
-            // Stores the itemView in a public final member variable that can be used
-            // to access the context from any ViewHolder instance.
-            super(itemView);
-
-            tvTitle = (TextView) itemView.findViewById(R.id.tvTitle);
-            tvOverview = (TextView) itemView.findViewById(R.id.tvOverview);
-            ivMovieImage = (ImageView) itemView.findViewById(R.id.ivMovieImage);
-
+    @Override
+    public int getItemViewType(int position) {
+        if (mMovies.get(position).isPopularMovie()) {
+            return POPULAR;
+        } else {
+            return UNPOPULAR;
         }
     }
 
-    // Pass in the movie list into the constructor
-    public MovieAdapter(Context context, List<Movie> movies){
-        mMovies = movies;
-        mContext = context;
-    }
 
-    // Usually involves inflating a layout from XML and returning the holder
+    /**
+     * This method creates different RecyclerView.ViewHolder objects based on the item view type.\
+     *
+     * @param viewGroup ViewGroup container for the item
+     * @param viewType type of view to be inflated
+     * @return viewHolder to be inflated
+     */
     @Override
-    public MovieAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        Context context = parent.getContext();
-        LayoutInflater inflater = LayoutInflater.from(context);
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
 
-        // Inflate the custom layout
-        View movieView = inflater.inflate(R.layout.item_movie, parent, false);
+        RecyclerView.ViewHolder viewHolder;
+        LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
 
-        // Return a new holder instance
-        ViewHolder viewHolder = new ViewHolder(movieView);
+        switch (viewType) {
+            case POPULAR:
+                View v1 = inflater.inflate(R.layout.item_movie_popular, viewGroup, false);
+                viewHolder = new PopularMovieViewHolder(v1);
+                break;
+            case UNPOPULAR:
+                View v2 = inflater.inflate(R.layout.item_movie_unpopular, viewGroup, false);
+                viewHolder = new UnpopularMovieViewHolder(v2);
+                break;
+            default:
+                View v = inflater.inflate(R.layout.item_movie_unpopular, viewGroup, false);
+                viewHolder = new UnpopularMovieViewHolder(v);
+                break;
+        }
         return viewHolder;
     }
 
     // Involves populating data into the item through holder
     @Override
-    public void onBindViewHolder(MovieAdapter.ViewHolder viewHolder, int position) {
-        // Get the data model based on position
-        Movie movie = mMovies.get(position);
-
-        // Set item views based on your views and data model
-        TextView tvTitle = viewHolder.tvTitle;
-        tvTitle.setText(movie.getOriginalTitle());
-        TextView tvOverview = viewHolder.tvOverview;
-        tvOverview.setText(movie.getOverview());
-
-        String imagePath = new String();
-        int orientation = getContext().getResources().getConfiguration().orientation;
-        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-            imagePath = movie.getPosterPath();
-
-        } else if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            imagePath = movie.getBackdropPath();
+    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
+        switch (viewHolder.getItemViewType()) {
+            case POPULAR:
+                PopularMovieViewHolder vh1 = (PopularMovieViewHolder) viewHolder;
+                configurePopularMovieViewHolder(vh1, position);
+                break;
+            case UNPOPULAR:
+                UnpopularMovieViewHolder vh2 = (UnpopularMovieViewHolder) viewHolder;
+                configureUnpopularMovieViewHolder(vh2, position);
+                break;
+            default:
+                PopularMovieViewHolder v = (PopularMovieViewHolder) viewHolder;
+                configurePopularMovieViewHolder(v, position);
+                break;
         }
 
-        ImageView ivMovieImage = viewHolder.ivMovieImage;
-        Picasso.with(getContext()).load(imagePath).placeholder(R.mipmap.ic_launcher).transform(new RoundedCornersTransformation(15, 15, RoundedCornersTransformation.CornerType.BOTTOM_RIGHT)).into(ivMovieImage);
 
+
+
+    }
+
+
+    private void configurePopularMovieViewHolder(PopularMovieViewHolder viewHolder, int position) {
+        Movie movie = (Movie) mMovies.get(position);
+
+        if(movie != null) {
+            // Set item views based on your views and data model
+            ImageView ivMovieImage = viewHolder.getIvMovieImage();
+            Picasso.with(getContext()).load(movie.getBackdropPath()).placeholder(R.mipmap.ic_launcher).transform(new RoundedCornersTransformation(15, 15, RoundedCornersTransformation.CornerType.BOTTOM_RIGHT)).into(ivMovieImage);
+        }
+    }
+
+    private void configureUnpopularMovieViewHolder(UnpopularMovieViewHolder viewHolder, int position) {
+        Movie movie = (Movie) mMovies.get(position);
+
+        if(movie != null) {
+            // Set item views based on your views and data model
+            TextView tvTitle = viewHolder.getTvTitle();
+            tvTitle.setText(movie.getOriginalTitle());
+            TextView tvOverview = viewHolder.getTvOverview();
+            tvOverview.setText(movie.getOverview());
+
+            String imagePath = new String();
+            int orientation = getContext().getResources().getConfiguration().orientation;
+            if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+                imagePath = movie.getPosterPath();
+
+            } else if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                imagePath = movie.getBackdropPath();
+            }
+
+            ImageView ivMovieImage = viewHolder.getIvMovieImage();
+            Picasso.with(getContext()).load(imagePath).placeholder(R.mipmap.ic_launcher).transform(new RoundedCornersTransformation(15, 15, RoundedCornersTransformation.CornerType.BOTTOM_RIGHT)).into(ivMovieImage);
+
+        }
     }
 
     // Returns the total count of items in the list

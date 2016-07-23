@@ -11,6 +11,12 @@ import java.util.ArrayList;
  */
 public class Movie {
 
+    String posterPath;
+    String originalTitle;
+    String overview;
+    String backdropPath;
+    Double vote_average;
+
     public String getPosterPath() {
         return String.format("https://image.tmdb.org/t/p/w500/%s", posterPath);
     }
@@ -27,10 +33,17 @@ public class Movie {
         return String.format("https://image.tmdb.org/t/p/w1280/%s", backdropPath);
     }
 
-    String posterPath;
-    String originalTitle;
-    String overview;
-    String backdropPath;
+    public Double getVoteAverage() {
+        return vote_average;
+    }
+
+    public Boolean isPopularMovie() {
+        if(vote_average < 5.0)
+            return false;
+        return true;
+    }
+
+
 
     public Movie(JSONObject jsonObject) throws JSONException {
 
@@ -38,6 +51,7 @@ public class Movie {
         this.originalTitle = jsonObject.getString("original_title");
         this.overview = jsonObject.getString("overview");
         this.backdropPath = jsonObject.getString("backdrop_path");
+        this.vote_average = jsonObject.getDouble("vote_average");
 
     }
 
