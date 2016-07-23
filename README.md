@@ -34,7 +34,10 @@ The following **bonus** features are implemented:
 
 The following **additional** features are implemented:
 
-* [ ] List anything else that you can get done to improve the app functionality!
+* [ ] Recycler views added to support Cardviews
+* [ ] Each of the movie is a Cardview layout 
+
+
 
 ## Video Walkthrough
 
