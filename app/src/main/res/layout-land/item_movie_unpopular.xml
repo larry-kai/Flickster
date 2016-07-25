@@ -31,7 +31,7 @@
             tools:src="@mipmap/ic_launcher"/>
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             tools:text="The Legend of Tarzan"
@@ -39,7 +39,9 @@
             android:padding="5dp"
             android:layout_alignParentTop="true"
             android:layout_toRightOf="@+id/ivMovieImage"
-            android:layout_toEndOf="@+id/ivMovieImage" />
+            android:layout_toEndOf="@+id/ivMovieImage"
+            android:textColor="#125688"
+            android:gravity="center"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -49,7 +51,9 @@
             android:padding="5dp"
             android:layout_below="@+id/tvTitle"
             android:layout_toRightOf="@+id/ivMovieImage"
-            android:layout_toEndOf="@+id/ivMovieImage" />
+            android:layout_toEndOf="@+id/ivMovieImage"
+            android:textColor="#125688"
+            android:gravity="center"/>
 
         
     </RelativeLayout>

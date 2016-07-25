@@ -1,16 +1,18 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="android:Theme.Material">
-        <!-- Customize your theme here. -->
-        <item name="android:colorPrimary">#0390f4</item>
-        <item name="android:colorPrimaryDark">#1565C0</item>
-        <item name="android:colorAccent">#FF5252</item>
-        <item name="android:textColorPrimary">#000000</item>
-        <item name="android:textColorSecondary">#000000</item>
-        <item name="android:textColorTertiary">#000000</item>
+        <style name="MyMaterialTheme" parent="MyMaterialTheme.Base">
+     
+        </style>
+     
+        <style name="MyMaterialTheme.Base" parent="Theme.AppCompat.Light.NoActionBar">
+            <item name="windowNoTitle">true</item>
+            <item name="windowActionBar">false</item>
+            <item name="colorPrimary">@color/colorPrimary</item>
+            <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+            <item name="colorAccent">@color/colorAccent</item>
+        </style>
 
-    </style>
 
 
 </resources>

@@ -1,9 +1,9 @@
 package com.codepath.flickster.activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -25,7 +25,7 @@ import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
 
-public class MovieActivity extends Activity {
+public class MovieActivity extends AppCompatActivity {
     private static String TAG = "MovieActivity";
     private ArrayList<Movie> movies;
     private SwipeRefreshLayout swipeContainer;

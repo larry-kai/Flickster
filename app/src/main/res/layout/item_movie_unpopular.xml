@@ -10,9 +10,9 @@
         card_view:cardCornerRadius="4dp"
         card_view:cardUseCompatPadding="true"
         card_view:cardPreventCornerOverlap="false"
-        card_view:contentPadding="5dp"
         android:clickable="true"
         card_view:cardElevation="6dp"
+        card_view:contentPadding="3dp"
         card_view:cardBackgroundColor="#E6E6E6"
         android:foreground="?android:attr/selectableItemBackground">
 
@@ -31,15 +31,17 @@
             tools:src="@mipmap/ic_launcher"/>
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:textAppearance="?android:attr/textAppearanceLarge"
             tools:text="The Legend of Tarzan"
             android:id="@+id/tvTitle"
             android:padding="5dp"
             android:layout_alignParentTop="true"
             android:layout_toRightOf="@+id/ivMovieImage"
-            android:layout_toEndOf="@+id/ivMovieImage" />
+            android:layout_toEndOf="@+id/ivMovieImage"
+            android:textColor="#125688"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -49,7 +51,11 @@
             android:padding="5dp"
             android:layout_below="@+id/tvTitle"
             android:layout_toRightOf="@+id/ivMovieImage"
-            android:layout_toEndOf="@+id/ivMovieImage" />
+            android:layout_toEndOf="@+id/ivMovieImage"
+            android:textColor="#125688"
+            android:typeface="normal"
+            android:gravity="center"/>
+
 
         
     </RelativeLayout>
