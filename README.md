@@ -36,6 +36,8 @@ The following **additional** features are implemented:
 
 * [ ] Recycler views added to support Cardviews
 * [ ] Each of the movie is a Cardview layout 
+* [ ] Custom launcher icon using Vector Drawable format
+ 
 
 
 

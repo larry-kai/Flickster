@@ -1,6 +1,7 @@
 package com.codepath.flickster.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.codepath.flickster.R;
+import com.codepath.flickster.activities.YoutubePlayerActivity;
 import com.codepath.flickster.models.Movie;
 import com.squareup.picasso.Picasso;
 
@@ -105,12 +107,32 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
 
     private void configurePopularMovieViewHolder(PopularMovieViewHolder viewHolder, int position) {
-        Movie movie = (Movie) mMovies.get(position);
+        final Movie movie = (Movie) mMovies.get(position);
 
         if(movie != null) {
             // Set item views based on your views and data model
             ImageView ivMovieImage = viewHolder.getIvMovieImage();
-            Picasso.with(getContext()).load(movie.getBackdropPath()).placeholder(R.mipmap.ic_launcher).transform(new RoundedCornersTransformation(15, 15, RoundedCornersTransformation.CornerType.BOTTOM_RIGHT)).into(ivMovieImage);
+            Picasso.with(getContext()).load(movie.getBackdropPath()).placeholder(R.drawable.placeholder).transform(new RoundedCornersTransformation(15, 15, RoundedCornersTransformation.CornerType.ALL)).into(ivMovieImage);
+
+            // Set item views based on your views and data model
+            int orientation = getContext().getResources().getConfiguration().orientation;
+
+            if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                TextView tvTitle = viewHolder.getTvTitle();
+                tvTitle.setText(movie.getOriginalTitle());
+                TextView tvOverview = viewHolder.getTvOverview();
+                tvOverview.setText(movie.getOverview());
+            }
+            ImageView ivPlayIcon = viewHolder.getIvPlayIcon();
+
+            ivPlayIcon.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getContext(), YoutubePlayerActivity.class);
+                    intent.putExtra("movie_id", movie.getId());
+                    getContext().startActivity(intent);
+                }
+            });
         }
     }
 
@@ -134,7 +156,7 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             }
 
             ImageView ivMovieImage = viewHolder.getIvMovieImage();
-            Picasso.with(getContext()).load(imagePath).placeholder(R.mipmap.ic_launcher).transform(new RoundedCornersTransformation(15, 15, RoundedCornersTransformation.CornerType.BOTTOM_RIGHT)).into(ivMovieImage);
+            Picasso.with(getContext()).load(imagePath).fit().centerInside().placeholder(R.drawable.placeholder).transform(new RoundedCornersTransformation(15, 15, RoundedCornersTransformation.CornerType.ALL)).into(ivMovieImage);
 
         }
     }

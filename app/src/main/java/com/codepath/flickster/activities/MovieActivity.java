@@ -1,14 +1,18 @@
 package com.codepath.flickster.activities;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
+import android.widget.Toast;
 
 import com.codepath.flickster.R;
 import com.codepath.flickster.adapters.MovieAdapter;
+import com.codepath.flickster.decorators.ItemClickSupport;
 import com.codepath.flickster.models.Movie;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -46,6 +50,18 @@ public class MovieActivity extends Activity {
         // Set layout manager to position the items
         rvMovies.setLayoutManager(new LinearLayoutManager(this));
 
+        ItemClickSupport.addTo(rvMovies).setOnItemClickListener(
+                new ItemClickSupport.OnItemClickListener() {
+                    @Override
+                    public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+                        Movie movie = movies.get(position);
+                        Toast.makeText(getApplicationContext(), movie.getOriginalTitle(), Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(MovieActivity.this, ExploreActivity.class);
+                        intent.putExtra("movie_id", movie.getId());
+                        startActivity(intent);
+                    }
+                }
+        );
         //setup swipe to refresh
         setupSwipeToRefreshView();
     }
@@ -75,7 +91,6 @@ public class MovieActivity extends Activity {
     private void getMovies() {
         String url = "https://api.themoviedb.org/3/movie/now_playing?api_key=a07e22bc18f5cb106bfe4cc1f83ad8ed";
 
-
         AsyncHttpClient client = new AsyncHttpClient();
         client.get(url, new JsonHttpResponseHandler() {
             @Override
@@ -100,4 +115,5 @@ public class MovieActivity extends Activity {
         });
 
     }
+
 }

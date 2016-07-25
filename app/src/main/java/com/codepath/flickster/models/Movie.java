@@ -11,11 +11,43 @@ import java.util.ArrayList;
  */
 public class Movie {
 
+    public void setPosterPath(String posterPath) {
+        this.posterPath = posterPath;
+    }
+
+    public void setOriginalTitle(String originalTitle) {
+        this.originalTitle = originalTitle;
+    }
+
+    public void setOverview(String overview) {
+        this.overview = overview;
+    }
+
+    public void setBackdropPath(String backdropPath) {
+        this.backdropPath = backdropPath;
+    }
+
+    public void setVote_average(Double vote_average) {
+        this.vote_average = vote_average;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
     String posterPath;
     String originalTitle;
     String overview;
     String backdropPath;
     Double vote_average;
+    long id;
+    Double popularity;
+
+    public long getId() {
+        return id;
+    }
+
+
 
     public String getPosterPath() {
         return String.format("https://image.tmdb.org/t/p/w500/%s", posterPath);
@@ -37,6 +69,10 @@ public class Movie {
         return vote_average;
     }
 
+    public Double getPopularity() {
+        return popularity;
+    }
+
     public Boolean isPopularMovie() {
         if(vote_average < 5.0)
             return false;
@@ -45,14 +81,24 @@ public class Movie {
 
 
 
-    public Movie(JSONObject jsonObject) throws JSONException {
+    public Movie(String originalTitle, String overview, String posterPath, String backdropPath, Double vote_average, long id, Double popularity){
+        this.posterPath = posterPath;
+        this.originalTitle = originalTitle;
+        this.overview = overview;
+        this.backdropPath = backdropPath;
+        this.vote_average = vote_average;
+        this.id = id;
+        this.popularity = popularity;
+    }
 
+
+    public Movie(JSONObject jsonObject) throws JSONException {
         this.posterPath = jsonObject.getString("poster_path");
         this.originalTitle = jsonObject.getString("original_title");
         this.overview = jsonObject.getString("overview");
         this.backdropPath = jsonObject.getString("backdrop_path");
         this.vote_average = jsonObject.getDouble("vote_average");
-
+        this.id = jsonObject.getLong("id");
     }
 
     public static ArrayList<Movie> fromJSONArray(JSONArray array){
