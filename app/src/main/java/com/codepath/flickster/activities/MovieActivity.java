@@ -8,7 +8,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import com.codepath.flickster.R;
 import com.codepath.flickster.adapters.MovieAdapter;
@@ -55,7 +54,6 @@ public class MovieActivity extends AppCompatActivity {
                     @Override
                     public void onItemClicked(RecyclerView recyclerView, int position, View v) {
                         Movie movie = movies.get(position);
-                        Toast.makeText(getApplicationContext(), movie.getOriginalTitle(), Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(MovieActivity.this, ExploreActivity.class);
                         intent.putExtra("movie_id", movie.getId());
                         startActivity(intent);
